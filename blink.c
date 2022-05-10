@@ -36,9 +36,13 @@ int main(void)
   TIMSK |= (1 << TOIE0); // habilitar timer0 overflow interrupt
 
   // Interrupciones de pin change config
-  GIMSK |= (1 << INT0)|(1 << INT1); // habilitar "external interrupt 0"
-  //PCMSK |= (1 << PCINT0);  // cambio en pin PB0
-  MCUCR = 0x02; // interrupt en flanco neg.
+  //GIMSK |= (1 << INT0)|(1 << INT1); // habilitar "external interrupt 0 y 1"
+
+  // Interrupts en flanco creciente
+  //MCUCR |= (1 << ISC11)|(1 << ISC01)|(1 << ISC00); 
+  GIMSK |= (1<<INT0)|(1<<INT1);  // interrupt INT0 e INT1
+  // INT0 habilitado con flanco pos. y INT1 con flanco neg.
+  MCUCR |= (1<<ISC01)|(1<<ISC10)|(1<<ISC11); 
 
   // INICIALIZACIÓN
   PORTB = 0x00;
@@ -106,8 +110,8 @@ void fsm(){
     case PP_blink:      // paso peatones apunto de terminar
         curr_delay = 30;
         if (valid){
-            PORTB ^= (1 << PB4)|(1 << PB6);
-            //PORTB ^= (1 << PB6);
+            PORTB ^= (1 << PB4);
+            PORTB ^= (1 << PB6);
         }
         if (blinks == 6){
             nxt_state = LDPD;
@@ -145,7 +149,7 @@ ISR(TIMER0_OVF_vect){
 
 ISR(INT0_vect){
     boton = 1;
-    //PORTB ^= (1 << PB1);
+    PORTB ^= (1 << PB1);
 }
 
 ISR(INT1_vect){
