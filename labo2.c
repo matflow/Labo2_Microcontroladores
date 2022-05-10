@@ -110,8 +110,8 @@ void fsm(){
     case PP_blink:      // paso peatones apunto de terminar
         curr_delay = 30;
         if (valid){
-            PORTB ^= (1 << PB4);
-            PORTB ^= (1 << PB6);
+            PORTB ^= (1 << PB4);//|~(1 << PB6);
+            PORTB ^= (1 << PB6);//|~(1 << PB4);
         }
         if (blinks == 6){
             nxt_state = LDPD;
@@ -148,11 +148,13 @@ ISR(TIMER0_OVF_vect){
 
 
 ISR(INT0_vect){
-    boton = 1;
-    PORTB ^= (1 << PB1);
+    if (estado == LDPV){
+    	boton = 1;
+    }
 }
 
 ISR(INT1_vect){
-    boton = 1;
-    //PORTB ^= (1 << PB1);
+    if (estado == LDPV){
+    	boton = 1;
+    }
 }
