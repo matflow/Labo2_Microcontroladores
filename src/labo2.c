@@ -36,7 +36,6 @@ int main(void)
   TIMSK |= (1 << TOIE0); // habilitar timer0 overflow interrupt
 
   // Interrupciones de pin change config
-  //GIMSK |= (1 << INT0)|(1 << INT1); // habilitar "external interrupt 0 y 1"
 
   // Interrupts en flanco creciente
   //MCUCR |= (1 << ISC11)|(1 << ISC01)|(1 << ISC00); 
@@ -120,7 +119,7 @@ void fsm(){
         }
         break;
     case LDPD:
-        curr_delay = 61;
+        curr_delay = 70;
         PORTB &= ~(1 << PB4);
         PORTB &= ~(1 << PB6);
         PORTB |= (1 << PB5)|(1 << PB7); // luces peatones en rojo
